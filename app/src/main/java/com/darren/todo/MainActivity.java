@@ -17,12 +17,16 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.darren.todo.model.Task;
 import com.darren.todo.todo.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,9 @@ public class MainActivity extends AppCompatActivity
 
         //
         String[] myStringArray = {"apple", "orange", "oops", "andrew"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, myStringArray);
+        tasks.add(new Task("test", "desk"));
+        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
+                android.R.layout.simple_list_item_1, tasks);
         ListView cl = (ListView) findViewById(R.id.list);
         cl.setAdapter(adapter);
         //Log.d("view", cl.toString());
