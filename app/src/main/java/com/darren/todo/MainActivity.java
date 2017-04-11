@@ -1,10 +1,9 @@
 package com.darren.todo;
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,19 +13,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.darren.todo.model.Task;
 import com.darren.todo.todo.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<Task> tasks = new ArrayList<>();
+
+
+    private EditText        mEditText;
+    private ArrayList<Task> mTasks = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +59,31 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //
-        String[] myStringArray = {"apple", "orange", "oops", "andrew"};
-        for (int i = 0; i < 20; i++) {
-            tasks.add(new Task("test"+i, "desk"));
-        }
-
         ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                android.R.layout.simple_list_item_1, tasks);
+                android.R.layout.simple_list_item_1, mTasks);
         ListView cl = (ListView) findViewById(R.id.list);
         cl.setAdapter(adapter);
         //Log.d("view", cl.toString());
 
+
+        mEditText = (EditText) findViewById(R.id.newTask);
+        mEditText.setImeActionLabel("actionDone", KeyEvent.KEYCODE_ENTER);
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId== EditorInfo.IME_ACTION_DONE) {
+                    createTask(textView.getText());
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void createTask(CharSequence text) {
+
+        mTasks.add(new Task(text.toString(), ""));
+        mEditText.getText().clear();
     }
 
     @Override
