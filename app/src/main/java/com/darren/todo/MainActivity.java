@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity
 
         //
         String[] myStringArray = {"apple", "orange", "oops", "andrew"};
-        tasks.add(new Task("test", "desk"));
+        for (int i = 0; i < 20; i++) {
+            tasks.add(new Task("test"+i, "desk"));
+        }
+
         ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
                 android.R.layout.simple_list_item_1, tasks);
         ListView cl = (ListView) findViewById(R.id.list);
