@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.darren.todo.model.Task;
+import com.darren.todo.model.source.TasksRepository;
 import com.darren.todo.todo.R;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity
 
     private EditText        mEditText;
     private ArrayList<Task> mTasks = new ArrayList<>();
-
+    TasksRepository     mTaskRepository = Injection.provideTasksRepository(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
