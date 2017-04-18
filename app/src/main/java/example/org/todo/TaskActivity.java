@@ -1,6 +1,7 @@
 package example.org.todo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
@@ -34,12 +35,29 @@ import static android.R.attr.id;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TaskActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TaskActivity.TaskItemListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private EditText mEditText;
 
     private TasksRepository mRepo;
-    private TasksAdapter mAdapter;
+    private TasksAdapter mListAdapter;
+    private TaskItemListener mItemListener = new TaskItemListener() {
+        @Override
+        public void onTaskClick(Task clickedTask) {
+
+        }
+
+        @Override
+        public void onCompleteTaskClick(Task completedTask) {
+
+        }
+
+        @Override
+        public void onActivateTaskClick(Task activatedTask) {
+
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +84,18 @@ public class TaskActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        mListAdapter = new TasksAdapter(new ArrayList<Task>(0), mItemListener);
+
         mRepo = Injection.provideTasksRepository(getApplicationContext());
         mRepo.getTasks(new TasksDataSource.LoadTasksCallback() {
             @Override
             public void onTasksLoaded(List<Task> tasks) {
-
+                mListAdapter.replaceData(tasks);
             }
 
             @Override
             public void onDataNotAvailable() {
-
             }
         });
 
@@ -101,7 +121,10 @@ public class TaskActivity extends AppCompatActivity
     }
 
     private void createTask(CharSequence text) {
-        mTasks.add(new Task(text.toString(), ""));
+        Task t = new Task(text.toString(), "");
+        mRepo.saveTask(t);
+        mListAdapter.addTask();
+
         mEditText.getText().clear();
     }
 
@@ -163,20 +186,13 @@ public class TaskActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskClick(Task clickedTask) {
-
+    protected void onResume() {
+        super.onResume();
     }
 
-    @Override
-    public void onCompleteTaskClick(Task completedTask) {
-
+    private loadTask() {
+        mRepo.
     }
-
-    @Override
-    public void onActivateTaskClick(Task activatedTask) {
-
-    }
-
 
     private static class TasksAdapter extends BaseAdapter {
 
@@ -186,6 +202,10 @@ public class TaskActivity extends AppCompatActivity
         public TasksAdapter(List<Task> tasks, TaskItemListener itemListener) {
             setList(tasks);
             mItemListener = itemListener;
+        }
+
+        public void addTask(@NonNull Task task){
+            mTasks.add(task);
         }
 
         public void replaceData(List<Task> tasks) {
@@ -267,4 +287,5 @@ public class TaskActivity extends AppCompatActivity
 
         void onActivateTaskClick(Task activatedTask);
     }
+
 }
