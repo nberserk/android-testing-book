@@ -56,7 +56,7 @@ public class TaskActivity extends AppCompatActivity
         public void onActivateTaskClick(Task activatedTask) {
 
         }
-    }
+    };
 
 
     @Override
@@ -85,7 +85,13 @@ public class TaskActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+        //
         mListAdapter = new TasksAdapter(new ArrayList<Task>(0), mItemListener);
+        ListView cl = (ListView) findViewById(R.id.list);
+        cl.setAdapter(mListAdapter);
+        //Log.d("view", cl.toString());
+
 
         mRepo = Injection.provideTasksRepository(getApplicationContext());
         mRepo.getTasks(new TasksDataSource.LoadTasksCallback() {
@@ -99,12 +105,6 @@ public class TaskActivity extends AppCompatActivity
             }
         });
 
-        //
-        ArrayAdapter<Task> adapter = new ArrayAdapter<Task>(this,
-                android.R.layout.simple_list_item_1, mTasks);
-        ListView cl = (ListView) findViewById(R.id.list);
-        cl.setAdapter(adapter);
-        //Log.d("view", cl.toString());
 
 
         mEditText = (EditText) findViewById(R.id.newTask);
@@ -123,7 +123,7 @@ public class TaskActivity extends AppCompatActivity
     private void createTask(CharSequence text) {
         Task t = new Task(text.toString(), "");
         mRepo.saveTask(t);
-        mListAdapter.addTask();
+        mListAdapter.addTask(t);
 
         mEditText.getText().clear();
     }
@@ -190,8 +190,8 @@ public class TaskActivity extends AppCompatActivity
         super.onResume();
     }
 
-    private loadTask() {
-        mRepo.
+    private void loadTask() {
+        //mRepo.
     }
 
     private static class TasksAdapter extends BaseAdapter {
