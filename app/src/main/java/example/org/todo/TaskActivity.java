@@ -1,9 +1,11 @@
 package example.org.todo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,24 +39,28 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TaskActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static String TAG = "TaskActivity";
+
     private EditText mEditText;
 
     private TasksRepository mRepo;
     private TasksAdapter mListAdapter;
     private TaskItemListener mItemListener = new TaskItemListener() {
         @Override
-        public void onTaskClick(Task clickedTask) {
-
+        public void onTaskClick(Task task) {
+            Intent intent = new Intent(TaskActivity.this, TaskDetailActivity.class);
+            intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, task.getId());
+            startActivity(intent);
+            Log.d(TAG, task.getTitle() + " clicked");
         }
 
         @Override
-        public void onCompleteTaskClick(Task completedTask) {
-
+        public void onCompleteTaskClick(Task task) {
+            Log.d(TAG, task.getTitle() + " completed");
         }
 
         @Override
         public void onActivateTaskClick(Task activatedTask) {
-
         }
     };
 
