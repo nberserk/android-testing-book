@@ -1,13 +1,21 @@
 package example.org.todo;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.google.common.base.Strings;
 
 import example.org.todo.model.Task;
 import example.org.todo.model.source.TasksDataSource;
@@ -21,7 +29,13 @@ public class TaskDetailActivity extends AppCompatActivity {
     public static final String EXTRA_TASK_ID = "TASK_ID";
 
     private TasksRepository mRepo;
+
+    @Nullable
+    private String mTaskId;
+    @Nullable
     private Task mTask;
+    private EditText mTitle;
+    private EditText mDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +48,67 @@ public class TaskDetailActivity extends AppCompatActivity {
 //        EditText editText = new EditText(getApplicationContext());
 //        getSupportActionBar().setCustomView(editText);
 
+        // ui
+        mTitle = (EditText)findViewById(R.id.title);
+        mDesc = (EditText) findViewById(R.id.description);
 
+        //
         mRepo = Injection.provideTasksRepository(getApplicationContext());
-        String taskId = getIntent().getStringExtra(EXTRA_TASK_ID);
-        if (taskId!=null){
-            Log.d(TAG, "tid: " + taskId);
-            mRepo.getTask(taskId, new TasksDataSource.GetTaskCallback() {
+        mTaskId = getIntent().getStringExtra(EXTRA_TASK_ID);
+        if (!Strings.isNullOrEmpty(mTaskId)){
+            Log.d(TAG, "tid: " + mTaskId);
+            mRepo.getTask(mTaskId, new TasksDataSource.GetTaskCallback() {
                 @Override
                 public void onTaskLoaded(Task task) {
                     mTask=task;
                     getSupportActionBar().setTitle(task.getTitle());
+                    mTitle.setText(task.getTitle());
+                    mDesc.setText(task.getDescription());
                 }
                 @Override
                 public void onDataNotAvailable() {
                 }
             });
         }
-
-
-
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.taskdetail_act_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                mRepo.deleteTask(mTaskId);
+                finish();
+                return true;
+        }
+        return false;
+    }
+
+//    @Override
+//    protected void onDestroy() {
+//        if (isValidTaskId()){
+//            mRepo.saveTask(mTask);
+//        }
+//        super.onDestroy();
+//    }
+
+    boolean isValidTaskId(){
+        if (Strings.isNullOrEmpty(mTaskId)){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId));
+
+        super.onBackPressed();
+    }
 }

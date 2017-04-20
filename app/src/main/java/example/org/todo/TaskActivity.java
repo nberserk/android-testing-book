@@ -99,17 +99,8 @@ public class TaskActivity extends AppCompatActivity
         //Log.d("view", cl.toString());
 
 
-        mRepo = Injection.provideTasksRepository(getApplicationContext());
-        mRepo.getTasks(new TasksDataSource.LoadTasksCallback() {
-            @Override
-            public void onTasksLoaded(List<Task> tasks) {
-                mListAdapter.replaceData(tasks);
-            }
 
-            @Override
-            public void onDataNotAvailable() {
-            }
-        });
+
 
 
 
@@ -124,6 +115,11 @@ public class TaskActivity extends AppCompatActivity
                 return false;
             }
         });
+
+
+        mRepo = Injection.provideTasksRepository(getApplicationContext());
+
+        //loadTask();
     }
 
     private void createTask(CharSequence text) {
@@ -194,10 +190,20 @@ public class TaskActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        loadTask();
     }
 
     private void loadTask() {
-        //mRepo.
+        mRepo.getTasks(new TasksDataSource.LoadTasksCallback() {
+            @Override
+            public void onTasksLoaded(List<Task> tasks) {
+                mListAdapter.replaceData(tasks);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+            }
+        });
     }
 
     private static class TasksAdapter extends BaseAdapter {
@@ -255,13 +261,13 @@ public class TaskActivity extends AppCompatActivity
 
             // Active/completed task UI
             completeCB.setChecked(task.isCompleted());
-            if (task.isCompleted()) {
-                rowView.setBackgroundDrawable(viewGroup.getContext()
-                        .getResources().getDrawable(R.drawable.list_completed_touch_feedback));
-            } else {
-                rowView.setBackgroundDrawable(viewGroup.getContext()
-                        .getResources().getDrawable(R.drawable.touch_feedback));
-            }
+//            if (task.isCompleted()) {
+//                rowView.setBackgroundDrawable(viewGroup.getContext()
+//                        .getResources().getDrawable(R.drawable.list_completed_touch_feedback));
+//            } else {
+//                rowView.setBackgroundDrawable(viewGroup.getContext()
+//                        .getResources().getDrawable(R.drawable.touch_feedback));
+//            }
 
             completeCB.setOnClickListener(new View.OnClickListener() {
                 @Override
