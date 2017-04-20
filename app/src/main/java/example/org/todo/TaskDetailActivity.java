@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,8 +33,6 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     @Nullable
     private String mTaskId;
-    @Nullable
-    private Task mTask;
     private EditText mTitle;
     private EditText mDesc;
 
@@ -60,7 +59,6 @@ public class TaskDetailActivity extends AppCompatActivity {
             mRepo.getTask(mTaskId, new TasksDataSource.GetTaskCallback() {
                 @Override
                 public void onTaskLoaded(Task task) {
-                    mTask=task;
                     getSupportActionBar().setTitle(task.getTitle());
                     mTitle.setText(task.getTitle());
                     mDesc.setText(task.getDescription());
@@ -82,6 +80,10 @@ public class TaskDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                saveTask();
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             case R.id.menu_delete:
                 mRepo.deleteTask(mTaskId);
                 finish();
@@ -90,14 +92,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         return false;
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        if (isValidTaskId()){
-//            mRepo.saveTask(mTask);
-//        }
-//        super.onDestroy();
-//    }
-
     boolean isValidTaskId(){
         if (Strings.isNullOrEmpty(mTaskId)){
             return false;
@@ -105,10 +99,15 @@ public class TaskDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    private void saveTask(){
+        if (isValidTaskId()){
+            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId));
+        }
+    }
+
     @Override
     public void onBackPressed() {
-        mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId));
-
+        saveTask();
         super.onBackPressed();
     }
 }
