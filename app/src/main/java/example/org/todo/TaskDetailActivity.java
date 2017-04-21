@@ -44,6 +44,16 @@ public class TaskDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task_detail);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveTask();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                finish();
+            }
+        });
 //        EditText editText = new EditText(getApplicationContext());
 //        getSupportActionBar().setCustomView(editText);
 
@@ -80,10 +90,6 @@ public class TaskDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                saveTask();
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
             case R.id.menu_delete:
                 mRepo.deleteTask(mTaskId);
                 finish();
@@ -105,9 +111,4 @@ public class TaskDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        saveTask();
-        super.onBackPressed();
-    }
 }

@@ -23,6 +23,7 @@
             android:name=".TaskDetailActivity"
             android:label="@string/title_activity_task_detail"
             android:parentActivityName=".TaskActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -12,11 +12,6 @@
     tools:layout_editor_absoluteX="0dp">
 
     <!--to hold a focus-->
-    <LinearLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="0px"
-        android:layout_height="0px"/>
 
     <EditText
         android:id="@+id/newTask"
