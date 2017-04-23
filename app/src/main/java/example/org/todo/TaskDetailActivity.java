@@ -24,7 +24,7 @@ import example.org.todo.model.source.TasksRepository;
 
 import static example.org.todo.R.menu.task;
 
-public class TaskDetailActivity extends AppCompatActivity {
+public class TaskDetailActivity extends AppCompatActivity implements ReminderDialog.ReminderDialogListener {
     private static final String TAG = "TaskDetailAct";
 
     public static final String EXTRA_TASK_ID = "TASK_ID";
@@ -121,4 +121,13 @@ public class TaskDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onDialogPositiveClick(ReminderDialog dialog) {
+        //dialog.mCalendar.
+    }
+
+    @Override
+    public void onDialogNegativeClick(ReminderDialog dialog) {
+        // do nothing
+    }
 }
