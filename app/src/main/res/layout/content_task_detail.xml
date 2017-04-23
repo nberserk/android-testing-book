@@ -53,6 +53,8 @@
         android:gravity="center_vertical"
         android:text="미리 알림 설정"
         android:textAlignment="center"
+        android:onClick="onClickDueDate"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/labelDesc"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
