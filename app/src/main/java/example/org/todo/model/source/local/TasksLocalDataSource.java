@@ -69,7 +69,8 @@ public class TasksLocalDataSource implements TasksDataSource {
                 TasksPersistenceContract.TaskEntry.COLUMN_NAME_ENTRY_ID,
                 TasksPersistenceContract.TaskEntry.COLUMN_NAME_TITLE,
                 TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION,
-                TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED
+                TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED,
+                TaskEntry.COLUMN_NAME_DUE
         };
 
         Cursor c = db.query(
@@ -83,7 +84,8 @@ public class TasksLocalDataSource implements TasksDataSource {
                         c.getString(c.getColumnIndexOrThrow(TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION));
                 boolean completed =
                         c.getInt(c.getColumnIndexOrThrow(TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
-                Task task = new Task(title, description, itemId, completed);
+                long due = c.getLong(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DUE));
+                Task task = new Task(title, description, itemId, completed, due);
                 tasks.add(task);
             }
         }
@@ -114,7 +116,8 @@ public class TasksLocalDataSource implements TasksDataSource {
                 TaskEntry.COLUMN_NAME_ENTRY_ID,
                 TaskEntry.COLUMN_NAME_TITLE,
                 TaskEntry.COLUMN_NAME_DESCRIPTION,
-                TaskEntry.COLUMN_NAME_COMPLETED
+                TaskEntry.COLUMN_NAME_COMPLETED,
+                TaskEntry.COLUMN_NAME_DUE
         };
 
         String selection = TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
@@ -133,7 +136,8 @@ public class TasksLocalDataSource implements TasksDataSource {
                     c.getString(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DESCRIPTION));
             boolean completed =
                     c.getInt(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_COMPLETED)) == 1;
-            task = new Task(title, description, itemId, completed);
+            long due = c.getLong(c.getColumnIndexOrThrow(TaskEntry.COLUMN_NAME_DUE));
+            task = new Task(title, description, itemId, completed, due);
         }
         if (c != null) {
             c.close();
@@ -158,6 +162,7 @@ public class TasksLocalDataSource implements TasksDataSource {
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_TITLE, task.getTitle());
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED, task.isCompleted());
+        values.put(TaskEntry.COLUMN_NAME_DUE, task.getDueDate());
 
         db.insert(TasksPersistenceContract.TaskEntry.TABLE_NAME, null, values);
 
