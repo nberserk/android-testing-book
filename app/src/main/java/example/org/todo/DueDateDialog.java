@@ -33,6 +33,8 @@ public class DueDateDialog extends DialogFragment {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog dlg = new  DatePickerDialog(getActivity(), (TaskDetailActivity)getActivity(), year, month, day);
+        dlg.setButton(DatePickerDialog.BUTTON_POSITIVE, "Save", dlg);
+        dlg.setButton(DatePickerDialog.BUTTON_NEGATIVE, "Remove", (TaskDetailActivity)getActivity());
         return dlg;
     }
 }

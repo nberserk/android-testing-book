@@ -1,6 +1,7 @@
 package example.org.todo;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,7 +25,7 @@ import example.org.todo.model.Task;
 import example.org.todo.model.source.TasksDataSource;
 import example.org.todo.model.source.TasksRepository;
 
-public class TaskDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class TaskDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
     private static final String TAG = "TaskDetailAct";
 
     public static final String EXTRA_TASK_ID = "TASK_ID";
@@ -149,5 +150,10 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, dayOfMonth);
         setDueDate(cal.getTimeInMillis());
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        setDueDate(0l);
     }
 }
