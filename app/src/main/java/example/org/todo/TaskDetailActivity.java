@@ -58,6 +58,16 @@ public class TaskDetailActivity extends AppCompatActivity {
 //        getSupportActionBar().setCustomView(editText);
 
         // ui
+        findViewById(R.id.setReminder).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReminderDialog newFragment = new ReminderDialog();
+                newFragment.show(getFragmentManager(), "oops");
+//                newFragment.startActivityForResult();
+                //newFragment.show(getSupportFragmentManager(), "missiles");
+
+            }
+        });
         mTitle = (EditText)findViewById(R.id.title);
         mDesc = (EditText) findViewById(R.id.description);
 
