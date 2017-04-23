@@ -1,27 +1,33 @@
 package example.org.todo;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.CalendarView;
+
+import java.util.Calendar;
 
 /**
  * Created by darren on 4/23/17.
  */
 
 public class DueDateDialog extends DialogFragment {
+    private static String ARG = "due";
+
+    static DueDateDialog newInstance(long due){
+        DueDateDialog frag = new DueDateDialog();
+        Bundle args = new Bundle();
+        args.putLong(ARG, due);
+        frag.setArguments(args);
+        return frag;
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final Calendar calendar = Calendar.getInstance(getResources().getConfiguration().locale);
+        long due = getArguments().getLong(ARG);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(due);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);

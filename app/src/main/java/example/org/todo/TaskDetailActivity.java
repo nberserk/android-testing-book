@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.google.common.base.Strings;
 
+import java.util.Calendar;
+
 import example.org.todo.model.Task;
 import example.org.todo.model.source.TasksDataSource;
 import example.org.todo.model.source.TasksRepository;
@@ -28,12 +30,13 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     public static final String EXTRA_TASK_ID = "TASK_ID";
 
     private TasksRepository mRepo;
+    private long mDue;
 
     @Nullable
     private String mTaskId;
     private EditText mTitle;
     private EditText mDesc;
-    private TextView mDueDate;
+    private TextView mDueDateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         });
         mTitle = (EditText)findViewById(R.id.title);
         mDesc = (EditText) findViewById(R.id.description);
-        mDueDate = (TextView) findViewById(R.id.duedate);
+        mDueDateText = (TextView) findViewById(R.id.duedate);
 
         //
         mRepo = Injection.provideTasksRepository(getApplicationContext());
@@ -78,12 +81,26 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
                     getSupportActionBar().setTitle(task.getTitle());
                     mTitle.setText(task.getTitle());
                     mDesc.setText(task.getDescription());
+                    setDueDate(task.getDueDate());
                 }
                 @Override
                 public void onDataNotAvailable() {
                 }
             });
         }
+    }
+
+    private void setDueDate(long time){
+        if(time==0){
+            mDueDateText.setText("Set Due Date");
+        }else{
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(time);
+
+            mDueDateText.setText(String.format("Due %1$tb %1$te, %1$tY", cal));
+        }
+
+        mDue = time;
     }
 
     @Override
@@ -113,17 +130,24 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
 
     private void saveTask(){
         if (isValidTaskId()){
-            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId));
+            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mDue));
         }
     }
 
     public void onClickDueDate(View v){
-        DueDateDialog newFragment = new DueDateDialog();
+        long defaultDue = mDue;
+        if(defaultDue==0){
+            Calendar cal = Calendar.getInstance();
+            defaultDue = cal.getTimeInMillis();
+        }
+        DueDateDialog newFragment =  DueDateDialog.newInstance(defaultDue);
         newFragment.show(getFragmentManager(), "DueDateDialog");
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Log.d(TAG, "date picked");
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, dayOfMonth);
+        setDueDate(cal.getTimeInMillis());
     }
 }
