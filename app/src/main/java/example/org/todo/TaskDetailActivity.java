@@ -1,6 +1,7 @@
 package example.org.todo;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +27,7 @@ import example.org.todo.model.Task;
 import example.org.todo.model.source.TasksDataSource;
 import example.org.todo.model.source.TasksRepository;
 
-public class TaskDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
+public class TaskDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener, TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "TaskDetailAct";
 
     public static final String EXTRA_TASK_ID = "TASK_ID";
@@ -39,6 +40,8 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     private EditText mTitle;
     private EditText mDesc;
     private TextView mDueDateText;
+    private Calendar mCalendar = Calendar.getInstance();
+    private TextView mTimeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         mTitle = (EditText)findViewById(R.id.title);
         mDesc = (EditText) findViewById(R.id.description);
         mDueDateText = (TextView) findViewById(R.id.duedate);
+        mTimeText = (TextView) findViewById(R.id.time);
 
         //
         mRepo = Injection.provideTasksRepository(getApplicationContext());
@@ -86,17 +90,15 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
-    private void setDueDate(long time){
-        if(time==0){
-            mDueDateText.setText("Set Due Date");
-        }else{
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(time);
+    private void setDueDate(int year, int month, int day){
+        mCalendar.set(year, month, day);
 
-            mDueDateText.setText(String.format("Due %1$tb %1$te, %1$tY", cal));
-        }
+        mDueDateText.setText(String.format("Due %1$tb %1$te, %1$tY", mCalendar.getTimeInMillis()));
+    }
 
-        mDue = time;
+    private void removeDueDate(){
+        mDueDateText.setText("Set Due Date");
+        mCalendar.set(0,0,0);
     }
 
     @Override
@@ -126,7 +128,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
 
     private void saveTask(){
         if (isValidTaskId()){
-            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mDue));
+            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mCalendar.getTimeInMillis()));
         }
     }
 
@@ -141,18 +143,27 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     }
 
     public void onClickTime(View v){
-        
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, dayOfMonth);
-        setDueDate(cal.getTimeInMillis());
+        setDueDate(year, month, dayOfMonth);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        mCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        mCalendar.set(Calendar.MINUTE, minute);
+
+        mTimeText.setText(String.format(), );
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        setDueDate(0l);
+        if(which==DatePickerDialog.BUTTON_NEGATIVE){
+            removeDueDate();
+        }
     }
+
+
 }
