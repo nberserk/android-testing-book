@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.common.base.Strings;
 
@@ -61,12 +62,6 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
 //        getSupportActionBar().setCustomView(editText);
 
         // ui
-        findViewById(R.id.setReminder).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         mTitle = (EditText)findViewById(R.id.title);
         mDesc = (EditText) findViewById(R.id.description);
         mDueDateText = (TextView) findViewById(R.id.duedate);
@@ -143,6 +138,10 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         }
         DueDateDialog newFragment =  DueDateDialog.newInstance(defaultDue);
         newFragment.show(getFragmentManager(), "DueDateDialog");
+    }
+
+    public void onClickTime(View v){
+        
     }
 
     @Override
