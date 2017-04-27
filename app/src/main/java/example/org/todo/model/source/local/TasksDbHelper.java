@@ -20,6 +20,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static android.net.wifi.SupplicantState.COMPLETED;
+
 public class TasksDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
 
@@ -38,7 +40,10 @@ public class TasksDbHelper extends SQLiteOpenHelper {
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED + BOOLEAN_TYPE + COMMA_SEP +
-                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE + " INTEGER" +
+                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE + " INTEGER" + COMMA_SEP +
+                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE_SET + BOOLEAN_TYPE + COMMA_SEP +
+                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_REMINDER_SET + BOOLEAN_TYPE +
+
             " )";
 
     public TasksDbHelper(Context context) {

@@ -35,5 +35,7 @@ public final class TasksPersistenceContract {
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_COMPLETED = "completed";
         public static final String COLUMN_NAME_DUE = "due";
+        public static final String COLUMN_NAME_DUE_SET = "due_set";
+        public static final String COLUMN_NAME_REMINDER_SET = "reminder_set";
     }
 }

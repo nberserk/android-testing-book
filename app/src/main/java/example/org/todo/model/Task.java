@@ -27,6 +27,8 @@ public final class Task {
     private final boolean mCompleted;
 
     private final long mDueDate;
+    private final boolean mIsDueSet;
+    private final boolean mIsReminderSet;
 
     /**
      * Use this constructor to create a new active Task.
@@ -35,7 +37,7 @@ public final class Task {
      * @param description description of the task
      */
     public Task(@Nullable String title, @Nullable String description) {
-        this(title, description, UUID.randomUUID().toString(), false, 0L);
+        this(title, description, UUID.randomUUID().toString(), false, 0L, false, false);
     }
 
     /**
@@ -46,8 +48,8 @@ public final class Task {
      * @param description description of the task
      * @param id          id of the task
      */
-    public Task(@Nullable String title, @Nullable String description, @NonNull String id, long due) {
-        this(title, description, id, false, due);
+    public Task(@Nullable String title, @Nullable String description, @NonNull String id, long due, boolean dueSet, boolean reminderSet) {
+        this(title, description, id, false, due, dueSet, reminderSet);
     }
 
     /**
@@ -57,9 +59,9 @@ public final class Task {
      * @param description description of the task
      * @param completed   true if the task is completed, false if it's active
      */
-    public Task(@Nullable String title, @Nullable String description, boolean completed, long date) {
-        this(title, description, UUID.randomUUID().toString(), completed, date);
-    }
+//    public Task(@Nullable String title, @Nullable String description, boolean completed, long date) {
+//        this(title, description, UUID.randomUUID().toString(), completed, date);
+//    }
 
     /**
      * Use this constructor to specify a completed Task if the Task already has an id (copy of
@@ -71,20 +73,14 @@ public final class Task {
      * @param completed   true if the task is completed, false if it's active
      */
     public Task(@Nullable String title, @Nullable String description,
-                @NonNull String id, boolean completed, long due) {
+                @NonNull String id, boolean completed, long due, boolean dueSet, boolean reminderSet) {
         mId = id;
         mTitle = title;
         mDescription = description;
         mCompleted = completed;
         mDueDate = due;
-    }
-
-    public Task(@NonNull Task task){
-        this.mId = task.getId();
-        this.mTitle = task.getTitle();
-        this.mDescription = task.getDescription();
-        this.mCompleted = task.isCompleted();
-        this.mDueDate = task.getDueDate();
+        mIsDueSet =dueSet;
+        mIsReminderSet =reminderSet;
     }
 
     @NonNull
@@ -95,6 +91,14 @@ public final class Task {
     @Nullable
     public String getTitle() {
         return mTitle;
+    }
+
+    public boolean isDueSet(){
+        return mIsDueSet;
+    }
+
+    public boolean isReminderSet(){
+        return mIsReminderSet;
     }
 
     @Nullable

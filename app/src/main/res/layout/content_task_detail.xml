@@ -43,23 +43,40 @@
     <TextView
         android:id="@+id/duedate"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_height="41dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="미리 알림 설정"
-        android:textAlignment="center"
-        android:onClick="onClickDueDate"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/labelDesc"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:gravity="center_vertical"
+        android:onClick="onClickDueDate"
+        android:text="Set due date"
+        android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/setReminder"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="onClickTime"
+        android:text="alarm time"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/duedate"/>
 
     <TextView
         android:id="@+id/labelDesc"
@@ -73,8 +90,9 @@
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setReminder"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/time"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/description"
@@ -96,16 +114,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelDesc"
         app:layout_constraintVertical_bias="1.0"/>
-
-    <Button
-        android:id="@+id/setReminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:text="Set Reminder"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:layout_marginEnd="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>
