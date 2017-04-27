@@ -14,7 +14,6 @@ import java.util.Calendar;
 
 public class TimeSetDialog extends DialogFragment {
     private static String ARG = "due";
-    public static int BUTTON_REMOVE = 4;
 
     static TimeSetDialog newInstance(long due){
         TimeSetDialog frag = new TimeSetDialog();
@@ -36,7 +35,7 @@ public class TimeSetDialog extends DialogFragment {
 
         TimePickerDialog dlg = new  TimePickerDialog(getActivity(),(TaskDetailActivity)getActivity(), time, minute, true);
         dlg.setButton(DatePickerDialog.BUTTON_POSITIVE, "Save", dlg);
-        dlg.setButton(BUTTON_REMOVE, "Remove", (TaskDetailActivity)getActivity());
+        dlg.setButton(DatePickerDialog.BUTTON_NEGATIVE, "Remove", (TaskDetailActivity)getActivity());
         return dlg;
     }
 }

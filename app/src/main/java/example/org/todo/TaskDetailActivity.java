@@ -44,6 +44,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     private TextView mTimeText;
     private boolean mIsReminderSet;
     private boolean mIsDueSet;
+    private boolean mIsDateShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,14 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
                     mTitle.setText(task.getTitle());
                     mDesc.setText(task.getDescription());
 
-                    setDueDate(task.getDueDate());
+                    if (task.isDueSet()){
+                        setDueDate(task.getDueDate());
+                        if(task.isReminderSet()){
+                            setReminder(task.getDueDate());
+                        }
+                    }
+
+
                 }
                 @Override
                 public void onDataNotAvailable() {
@@ -93,22 +101,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         }
     }
 
-    private void setDueDate(long milli){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(milli);
-        setDueDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-    }
 
-    private void setDueDate(int year, int month, int day){
-        mCalendar.set(year, month, day);
-
-        mDueDateText.setText(String.format("Due: %1$tb %1$te, %1$tY", mCalendar.getTimeInMillis()));
-    }
-
-    private void removeDueDate(){
-        mDueDateText.setText("Set Due Date");
-        mCalendar.set(0,0,0);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,21 +130,35 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
 
     private void saveTask(){
         if (isValidTaskId()){
-            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mCalendar.getTimeInMillis()));
+            mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mCalendar.getTimeInMillis(), mIsDueSet, mIsReminderSet));
         }
     }
 
     public void onClickDueDate(View v){
-        long defaultDue = mDue;
-        if(defaultDue==0){
-            Calendar cal = Calendar.getInstance();
-            defaultDue = cal.getTimeInMillis();
-        }
-        DueDateDialog newFragment =  DueDateDialog.newInstance(defaultDue);
+        mIsDateShow=true;
+        DueDateDialog newFragment =  DueDateDialog.newInstance(mCalendar.getTimeInMillis());
         newFragment.show(getFragmentManager(), "DueDateDialog");
     }
 
+    private void setDueDate(long milli){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(milli);
+        setDueDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private void setDueDate(int year, int month, int day){
+        mCalendar.set(year, month, day);
+        mDueDateText.setText(String.format("Due: %1$tb %1$te, %1$tY", mCalendar.getTimeInMillis()));
+        mIsDueSet=true;
+    }
+
+    private void removeDueDate(){
+        mDueDateText.setText("Set Due Date");
+        mIsDueSet=false;
+    }
+
     public void onClickTime(View v){
+        mIsDateShow=false;
         TimeSetDialog dlg = TimeSetDialog.newInstance(mCalendar.getTimeInMillis());
         dlg.show(getFragmentManager(), "TimeSetDialog");
     }
@@ -163,22 +170,35 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        setReminder(hour, minute);
+    }
+
+    private void setReminder(long milli){
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(milli);
+
+        setReminder(mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE));
+    }
+
+    private void setReminder(int hour, int minute){
         mCalendar.set(Calendar.HOUR_OF_DAY, hour);
         mCalendar.set(Calendar.MINUTE, minute);
 
         mTimeText.setText(String.format("Reminder: %1$tb %1$te %1$tY at %1$tR", mCalendar.getTimeInMillis()));
+        mIsReminderSet=true;
     }
 
     private void removeReminder() {
-        m
+        mIsReminderSet=false;
+        mTimeText.setText("Reminder: ");
     }
 
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if(which==DatePickerDialog.BUTTON_NEGATIVE){
+        if(mIsDateShow){
             removeDueDate();
-        }else if(which==TimeSetDialog.BUTTON_REMOVE){
+        }else {
             removeReminder();
         }
     }
