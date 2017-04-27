@@ -27,6 +27,8 @@ public final class Task {
     private final boolean mCompleted;
 
     private final long mDueDate;
+    private final boolean mIsDue;
+    private final boolean mIsReminder;
 
     /**
      * Use this constructor to create a new active Task.
@@ -57,9 +59,9 @@ public final class Task {
      * @param description description of the task
      * @param completed   true if the task is completed, false if it's active
      */
-    public Task(@Nullable String title, @Nullable String description, boolean completed, long date) {
-        this(title, description, UUID.randomUUID().toString(), completed, date);
-    }
+//    public Task(@Nullable String title, @Nullable String description, boolean completed, long date) {
+//        this(title, description, UUID.randomUUID().toString(), completed, date);
+//    }
 
     /**
      * Use this constructor to specify a completed Task if the Task already has an id (copy of
@@ -77,14 +79,9 @@ public final class Task {
         mDescription = description;
         mCompleted = completed;
         mDueDate = due;
-    }
+        mIsDue=false;
+        mIsReminder=false;
 
-    public Task(@NonNull Task task){
-        this.mId = task.getId();
-        this.mTitle = task.getTitle();
-        this.mDescription = task.getDescription();
-        this.mCompleted = task.isCompleted();
-        this.mDueDate = task.getDueDate();
     }
 
     @NonNull
