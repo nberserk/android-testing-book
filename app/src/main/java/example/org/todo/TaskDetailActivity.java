@@ -1,9 +1,14 @@
 package example.org.todo;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -128,9 +133,25 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         return true;
     }
 
+    private void setAlarm(){
+        Context context = getApplicationContext();
+        AlarmManager alarmMgr =  (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                         2* 1000, alarmIntent);
+    }
+
     private void saveTask(){
         if (isValidTaskId()){
             mRepo.saveTask(new Task(mTitle.getText().toString(), mDesc.getText().toString(), mTaskId, mCalendar.getTimeInMillis(), mIsDueSet, mIsReminderSet));
+
+            if(mIsReminderSet){
+                setAlarm();
+            }
         }
     }
 
