@@ -66,10 +66,10 @@ public class TasksLocalDataSource implements TasksDataSource {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
-                TasksPersistenceContract.TaskEntry.COLUMN_NAME_ENTRY_ID,
-                TasksPersistenceContract.TaskEntry.COLUMN_NAME_TITLE,
-                TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION,
-                TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED,
+                TaskEntry.COLUMN_NAME_ENTRY_ID,
+                TaskEntry.COLUMN_NAME_TITLE,
+                TaskEntry.COLUMN_NAME_DESCRIPTION,
+                TaskEntry.COLUMN_NAME_COMPLETED,
                 TaskEntry.COLUMN_NAME_DUE,
                 TaskEntry.COLUMN_NAME_DUE_SET,
                 TaskEntry.COLUMN_NAME_REMINDER_SET
@@ -121,7 +121,9 @@ public class TasksLocalDataSource implements TasksDataSource {
                 TaskEntry.COLUMN_NAME_TITLE,
                 TaskEntry.COLUMN_NAME_DESCRIPTION,
                 TaskEntry.COLUMN_NAME_COMPLETED,
-                TaskEntry.COLUMN_NAME_DUE
+                TaskEntry.COLUMN_NAME_DUE,
+                TaskEntry.COLUMN_NAME_DUE_SET,
+                TaskEntry.COLUMN_NAME_REMINDER_SET
         };
 
         String selection = TaskEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";

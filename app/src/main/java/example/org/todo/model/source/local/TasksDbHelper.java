@@ -30,6 +30,7 @@ public class TasksDbHelper extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " TEXT";
 
     private static final String BOOLEAN_TYPE = " INTEGER";
+    private static final String LONG_TYPE = " INTEGER";
 
     private static final String COMMA_SEP = ",";
 
@@ -40,7 +41,7 @@ public class TasksDbHelper extends SQLiteOpenHelper {
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED + BOOLEAN_TYPE + COMMA_SEP +
-                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE + " INTEGER" + COMMA_SEP +
+                    TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE + LONG_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_DUE_SET + BOOLEAN_TYPE + COMMA_SEP +
                     TasksPersistenceContract.TaskEntry.COLUMN_NAME_REMINDER_SET + BOOLEAN_TYPE +
 
