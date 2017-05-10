@@ -171,6 +171,8 @@ public class TasksLocalDataSource implements TasksDataSource {
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_DESCRIPTION, task.getDescription());
         values.put(TasksPersistenceContract.TaskEntry.COLUMN_NAME_COMPLETED, task.isCompleted());
         values.put(TaskEntry.COLUMN_NAME_DUE, task.getDueDate());
+        values.put(TaskEntry.COLUMN_NAME_DUE_SET, task.isDueSet());
+        values.put(TaskEntry.COLUMN_NAME_REMINDER_SET, task.isReminderSet());
 
         db.insert(TasksPersistenceContract.TaskEntry.TABLE_NAME, null, values);
 
