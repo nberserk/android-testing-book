@@ -1,8 +1,10 @@
 package example.org.todo;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -35,6 +37,7 @@ import example.org.todo.model.source.TasksRepository;
 
 import static android.R.attr.id;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static example.org.todo.R.id.newTask;
 
 public class TaskActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,7 +59,10 @@ public class TaskActivity extends AppCompatActivity
 
         @Override
         public void onCompleteTaskClick(Task task) {
-            Log.d(TAG, task.getTitle() + " completed");
+            Task newTask = new Task(task.getTitle(), task.getDescription(), task.getId(), !task.isCompleted(), task.getDueDate(), task.isDueSet(), task.isReminderSet());
+            Injection.provideTasksRepository(getApplicationContext()).saveTask(newTask);
+            mListAdapter.replaceData();
+            //Log.d(TAG, task.getTitle() + " completed");
         }
 
         @Override
@@ -104,7 +110,7 @@ public class TaskActivity extends AppCompatActivity
 
 
 
-        mEditText = (EditText) findViewById(R.id.newTask);
+        mEditText = (EditText) findViewById(newTask);
         mEditText.setImeActionLabel("actionDone", KeyEvent.KEYCODE_ENTER);
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -257,10 +263,18 @@ public class TaskActivity extends AppCompatActivity
             TextView titleTV = (TextView) rowView.findViewById(R.id.title);
             titleTV.setText(task.getTitleForList());
 
+
             CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.complete);
 
             // Active/completed task UI
-            completeCB.setChecked(task.isCompleted());
+            if(task.isCompleted()){
+                completeCB.setChecked(true);
+                titleTV.setPaintFlags(titleTV.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }else{
+                completeCB.setChecked(false);
+                titleTV.setPaintFlags(titleTV.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+
 //            if (task.isCompleted()) {
 //                rowView.setBackgroundDrawable(viewGroup.getContext()
 //                        .getResources().getDrawable(R.drawable.list_completed_touch_feedback));
